@@ -7,74 +7,41 @@
 <body>
 
 <p>
-<a href="no-dope-zones/no-dope-zone_Berlin.html">Berlin</a>
-<a href="no-dope-zones/no-dope-zone_Bremen.html">Bremen</a>
-<a href="no-dope-zones/no-dope-zone_Büsum.html">Büsum</a>
-<a href="no-dope-zones/no-dope-zone_Cochem.html">Cochem</a>
-<a href="no-dope-zones/no-dope-zone_Dortmund.html">Dortmund</a>
-<a href="no-dope-zones/no-dope-zone_Düsseldorf.html">Düsseldorf</a>
-<a href="no-dope-zones/no-dope-zone_Essen.html">Essen</a>
-<a href="no-dope-zones/no-dope-zone_Frankfurt-am-Main.html">Frankfurt am Main</a>
-<a href="no-dope-zones/no-dope-zone_Füssen.html">Füssen</a>
-<a href="no-dope-zones/no-dope-zone_Hamburg.html">Hamburg</a>
-<a href="no-dope-zones/no-dope-zone_Husum.html">Husum</a>
-<a href="no-dope-zones/no-dope-zone_Köln.html">Köln</a>
-<a href="no-dope-zones/no-dope-zone_Kühlungsborn.html">Kühlungsborn</a>
-<a href="no-dope-zones/no-dope-zone_Leipzig.html">Leipzig</a>
-<a href="no-dope-zones/no-dope-zone_München.html">München</a>
-<a href="no-dope-zones/no-dope-zone_Oberstdorf.html">Oberstdorf</a>
-<a href="no-dope-zones/no-dope-zone_Rothenburg-ob-der-Tauber.html">Rothenburg ob der Tauber</a>
-<a href="no-dope-zones/no-dope-zone_Stuttgart.html">Stuttgart</a>
-<a href="no-dope-zones/no-dope-zone_Winterberg.html">Winterberg</a>
+<a href="no-dope-zone/no-dope-zone_Berlin.html">Berlin</a>
+<a href="no-dope-zone/no-dope-zone_Bremen.html">Bremen</a>
+<a href="no-dope-zone/no-dope-zone_Büsum.html">Büsum</a>
+<a href="no-dope-zone/no-dope-zone_Cochem.html">Cochem</a>
+<a href="no-dope-zone/no-dope-zone_Dortmund.html">Dortmund</a>
+<a href="no-dope-zone/no-dope-zone_Düsseldorf.html">Düsseldorf</a>
+<a href="no-dope-zone/no-dope-zone_Essen.html">Essen</a>
+<a href="no-dope-zone/no-dope-zone_Frankfurt-am-Main.html">Frankfurt am Main</a>
+<a href="no-dope-zone/no-dope-zone_Füssen.html">Füssen</a>
+<a href="no-dope-zone/no-dope-zone_Hamburg.html">Hamburg</a>
+<a href="no-dope-zone/no-dope-zone_Husum.html">Husum</a>
+<a href="no-dope-zone/no-dope-zone_Köln.html">Köln</a>
+<a href="no-dope-zone/no-dope-zone_Kühlungsborn.html">Kühlungsborn</a>
+<a href="no-dope-zone/no-dope-zone_Leipzig.html">Leipzig</a>
+<a href="no-dope-zone/no-dope-zone_München.html">München</a>
+<a href="no-dope-zone/no-dope-zone_Oberstdorf.html">Oberstdorf</a>
+<a href="no-dope-zone/no-dope-zone_Rothenburg-ob-der-Tauber.html">Rothenburg ob der Tauber</a>
+<a href="no-dope-zone/no-dope-zone_Rügen.html">Rügen</a>
+<a href="no-dope-zone/no-dope-zone_Stuttgart.html">Stuttgart</a>
+<a href="no-dope-zone/no-dope-zone_Sylt.html">Sylt</a>
+<a href="no-dope-zone/no-dope-zone_Trier.html">Trier</a>
+<a href="no-dope-zone/no-dope-zone_Winterberg.html">Winterberg</a>
 </p>
+<br>
 
-
-<h3>Script:</h3>
 <pre>
-import osmnx as ox
-import folium
-ox.config(use_cache=True, log_console=True)
+Schule = Rot
+Kindergarten = Orange
+Spielplatz = Gelb
+Öffentliche Sportstätte = Grün
 
-# Change if needed
-city = "Berlin"
-
-# No need to change anything below this line
-
-place = city + ", Germany"
-place_types = ["school", "kindergarten", "playground"]
-G = ox.graph_from_place(place, network_type="all_private")
-
-osmmap = folium.Map(location=[G.nodes[list(G.nodes())[0]]["y"], G.nodes[list(G.nodes())[0]]["x"]], zoom_start=12)
-
-polygon = ox.geocode_to_gdf(place).unary_union
-
-# Loop over the place types and retrieve the places for each type
-for place_type in place_types:
-    # Check if the place type is playground
-    if place_type == "playground":
-        # Use leisure=playground tag
-        gdf = ox.geometries_from_polygon(polygon, tags={"leisure": place_type})
-    else:
-        # Use amenity tag
-        gdf = ox.geometries_from_polygon(polygon, tags={"amenity": place_type})
-
-    # Add markers and circles to the map for each geometry
-    for i, row in gdf.iterrows():
-        name = row["name"]
-        geom = row["geometry"]
-        # Check if the geometry is a point or a polygon
-        if geom.type == "Point":
-            lat = geom.y
-            lng = geom.x
-        elif geom.type == "Polygon":
-            # Get the centroid of the polygon
-            center = geom.centroid
-            lat = center.y
-            lng = center.x
-        folium.Circle([lat, lng], radius=250, color="blue", fill=True, fill_opacity=0.3).add_to(osmmap)
-
-# Display the map
-osmmap.save("no-dope-zone_" + city + ".html")
+Fußgängerzone = Blau (Die OSM Daten sind nicht immer korrekt, daher kann es sein, dass die Fußgängerzone nicht korrekt angezeigt wird)
 </pre>
+
+<a href="script.zip">Script</a>
+
 </body>
 </html>
